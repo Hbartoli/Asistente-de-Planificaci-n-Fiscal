@@ -218,6 +218,16 @@ with tab4:
     # Generación segura usando la lista global unificada
     pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
     
+    # Tabla de Datos Fiscales con márgenes corregidos y tabulación limpia hacia la derecha
+    for k, v in datos_fiscales.items():
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.cell(90, 8, f"{k}:", border=0) # Ampliamos a 90mm para que la etiqueta tenga espacio
+        
+        # Forzamos la posición del valor numérico bien hacia la derecha (columna fija a los 100mm)
+        pdf.set_x(105) 
+        pdf.set_font("Helvetica", "", 11)
+        pdf.cell(0, 8, f"{v}", border=0, ln=True)
+    
     st.download_button(
         label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
         data=pdf_bytes,
