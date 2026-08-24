@@ -132,28 +132,30 @@ with tab3:
         st.warning("⚠️ **Excedido de Parámetros:** Tus ingresos anuales estimados superan el límite extendido. Tu alta en el Régimen General será directa y sin reducciones de IVA escalonadas. Es crítico trabajar junto a un profesional contable.")
 
 # -------------------------------------------------------------------------
-# PESTAÑA 4: CHECKLIST Y HOJA DE RUTA
+# PESTAÑA 4: CHECKLIST Y HOJA DE RUTA + EXPORTACIÓN
 # -------------------------------------------------------------------------
 with tab4:
-    st.header("### 📋 Plan de Acción Estructurado")
-    st.write("arcá los pasos que vas conversando con tu equipo o analizando vos mismo:")
-    for tarea in lista_tareas:
+    st.header("📋 Plan de Acción Estructurado")
+    st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
+
     st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
-    st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ingresos Personales / Ganancias.")
+    st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")
     st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")
     st.checkbox("4. Dar de alta un nuevo punto de venta web específico para Facturación Electrónica tipo 'A' y 'B'.")
     st.checkbox("5. Informar el cambio de condición fiscal a todos tus proveedores recurrentes para exigir la emisión de Facturas 'A'.")
     st.checkbox("6. Actualizar tu estructura de costos y precios finales al público integrando el impacto del Impuesto al Valor Agregado.")
-    st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios digitalmente fuera de tu provincia natal).")
+    st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios fuera de tu provincia).")
 
     st.markdown("---")
     st.subheader("💾 Descargar Reporte Completo")
     st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción estructurado.")
-    # Generación del archivo PDF mediante la funciónpdf_bytes = generar_pdf(datos_reporte, lista_tareas)
+
+    # Generación del archivo PDF mediante la función
+    pdf_bytes = generar_pdf(datos_reporte, lista_tareas)
+
     st.download_button(
         label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
         data=pdf_bytes,
         file_name="Planificacion_Fiscal_RI.pdf",
         mime="application/pdf"
-        )
-    st.info("💡 **Perspectiva Empresarial:** Dejar atrás el Monotributo no es un castigo impositivo; es la confirmación de que tu modelo de negocios escaló y superó la etapa de microemprendimiento. Con orden financiero y previsión de flujo, representa el inicio de una estructura corporativa sólida.")
+    )
