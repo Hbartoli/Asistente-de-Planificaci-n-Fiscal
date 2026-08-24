@@ -228,23 +228,20 @@ with tab3:
 # -------------------------------------------------------------------------
 
 with tab4:
-  st.header("🛡️ Beneficios del Régimen de Puente Fiscal")
-  st.write("Si tu transición es planificada y ordenada, la normativa vigente mitiga el impacto financiero mediante créditos fiscales adicionales:")
-
-st.markdown("""
-- Crédito Fiscal Presunto de IVA: Podés computar el IVA contenido en las compras hechas a proveedores en los 12 meses anteriores al cambio.
-- Deducción Especial de Transición: Reducción de la base imponible del Impuesto a las Ganancias.
-- Reducción Progresiva de IVA: Descuento directo sobre el saldo técnico de IVA del 50% el primer año, 30% el segundo año y 10% el tercer año.
-""")
-
-ingresos_anuales_est = ingresos_mensuales * 12
-st.write(f"Tu proyección de ingresos anuales estimados es de: 
-${ingresos_anuales_est:,.2f}")
-
-if ingresos_anuales_est <= (TOPE_MONOTRIBUTO_ANUAL * 1.5):
-  st.success("🎉 Calificás para el Puente Fiscal: Tus ingresos estimados se encuentran dentro del límite del beneficio.")
-else:
-  st.warning("⚠️ Excedido de Parámetros: Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")
+    st.header("🛡️ Beneficios del Régimen de Puente Fiscal")
+    st.write("Si tu transición es planificada y ordenada, la normativa vigente mitiga el impacto financiero mediante créditos fiscales adicionales:")
+    
+    st.markdown("- **Crédito Fiscal Presunto de IVA:** Podés computar el IVA contenido en las compras hechas a proveedores en los 12 meses anteriores al cambio.")
+    st.markdown("- **Deducción Especial de Transición:** Reducción de la base imponible del Impuesto a las Ganancias.")
+    st.markdown("- **Reducción Progresiva de IVA:** Descuento directo sobre el saldo técnico de IVA del **50% el primer año**, **30% el segundo año** y **10% el tercer año**.")
+    
+    ingresos_anuales_est = ingresos_mensuales * 12
+    st.write(f"Tu proyeccion de ingresos anuales estimados es de: **${ingresos_anuales_est:,.2f}**")
+    
+    if ingresos_anuales_est <= (TOPE_MONOTRIBUTO_ANUAL * 1.5):
+        st.success("🎉 **Calificás para el Puente Fiscal:** Tus ingresos estimados se encuentran dentro del límite del beneficio.")
+    else:
+        st.warning("⚠️ **Excedido de Parámetros:** Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")
 
 # -------------------------------------------------------------------------
 # PESTAÑA 5: CHECKLIST Y HOJA DE RUTA + EXPORTACIÓN
