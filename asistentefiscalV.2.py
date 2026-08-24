@@ -191,15 +191,17 @@ with tab3:
     st.write(f"Tu proyección de ingresos anuales estimados es de: **${ingresos_anuales_est:,.2f}**")
     
     if ingresos_anuales_est <= (TOPE_MONOTRIBUTO_ANUAL * 1.5):
-    st.success("🎉 Calificás para el Puente Fiscal: Tus ingresos estimados se encuentran dentro del límite del beneficio.")
+        st.success("🎉 Calificás para el Puente Fiscal: Tus ingresos estimados se encuentran dentro del límite del beneficio.")
     else:
-    st.warning("⚠️ Excedido de Parámetros: Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")
+        st.warning("⚠️ Excedido de Parámetros: Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")
+
 # -------------------------------------------------------------------------
 # PESTAÑA 4: CHECKLIST Y HOJA DE RUTA + EXPORTACIÓN
 # -------------------------------------------------------------------------    
 with tab4:
     st.header("📋 Plan de Acción Estructurado")
     st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
+    
     # Renderizado manual de la lista visual en la app
     st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
     st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")
@@ -212,10 +214,13 @@ with tab4:
     st.markdown("---")
     st.subheader("💾 Descargar Reporte Completo")
     st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción estructurado.")
+    
     # Generación segura usando la lista global unificada
     pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
-    st.download_button(label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
-                       data=pdf_bytes,
-                       file_name="Planificacion_Fiscal_RI.pdf",
-                       mime="application/pdf"
-                       )
+    
+    st.download_button(
+        label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
+        data=pdf_bytes,
+        file_name="Planificacion_Fiscal_RI.pdf",
+        mime="application/pdf"
+    )
