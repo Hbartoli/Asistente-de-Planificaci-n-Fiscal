@@ -25,15 +25,11 @@ LISTA_TAREAS_GLOBAL = [
     "7. Readecuar la situacion en Ingresos Brutos (Alta en Convenio Multilateral si comercializas bienes o servicios fuera de tu provincia)."
 ]
 
- # Tabla de Datos Fiscales con márgenes corregidos y tabulación limpia hacia la derecha
-    for k, v in datos_fiscales.items():
-    pdf.set_font("Helvetica", "B", 11)
-     pdf.cell(90, 8, f"{k}:", border=0) # Ampliamos a 90mm para que la etiqueta tenga espacio
-        
-    # Forzamos la posición del valor numérico bien hacia la derecha (columna fija a los 100mm)
-    pdf.set_x(105) 
-    pdf.set_font("Helvetica", "", 11)
-    pdf.cell(0, 8, f"{v}", border=0, ln=True)
+ # Función unificada con márgenes corregidos y tabulación limpia hacia la derecha
+def generar_pdf(datos_fiscales, checklist_tareas):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
     
     # Título Principal
     pdf.set_font("Helvetica", "B", 18)
