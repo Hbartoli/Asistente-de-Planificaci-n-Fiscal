@@ -136,8 +136,8 @@ with tab3:
 # -------------------------------------------------------------------------
 with tab4:
     st.header("### 📋 Plan de Acción Estructurado")
-    st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
-
+    st.write("arcá los pasos que vas conversando con tu equipo o analizando vos mismo:")
+    for tarea in lista_tareas:
     st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
     st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ingresos Personales / Ganancias.")
     st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")
@@ -147,4 +147,13 @@ with tab4:
     st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios digitalmente fuera de tu provincia natal).")
 
     st.markdown("---")
+    st.subheader("💾 Descargar Reporte Completo")
+    st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción estructurado.")
+    # Generación del archivo PDF mediante la funciónpdf_bytes = generar_pdf(datos_reporte, lista_tareas)
+    st.download_button(
+        label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
+        data=pdf_bytes,
+        file_name="Planificacion_Fiscal_RI.pdf",
+        mime="application/pdf"
+        )
     st.info("💡 **Perspectiva Empresarial:** Dejar atrás el Monotributo no es un castigo impositivo; es la confirmación de que tu modelo de negocios escaló y superó la etapa de microemprendimiento. Con orden financiero y previsión de flujo, representa el inicio de una estructura corporativa sólida.")
