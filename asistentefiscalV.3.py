@@ -248,26 +248,23 @@ with tab4:
 # -------------------------------------------------------------------------
 
 with tab5:
-  st.header("📋 Plan de Acción Estructurado")
-  st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
+    st.header("📋 Plan de Acción Estructurado")
+    st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
 
-st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
-st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")
-st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")
-st.checkbox("4. Dar de alta un nuevo punto de venta web específico para Facturación Electrónica tipo 'A' y 'B'.")
-st.checkbox("5. Informar el cambio de condición fiscal a todos tus proveedores recurrentes para exigir la emisión de Facturas 'A'.")
-st.checkbox("6. Actualizar tu estructura de costos y precios finales al público integrando el impacto del Impuesto al Valor Agregado.")
-st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios fuera de tu provincia).")
+    st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
+    st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")
+    st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")
+    st.checkbox("4. Dar de alta un nuevo punto de venta web específico para Facturación Electrónica tipo 'A' y 'B'.")
+    st.checkbox("5. Informar el cambio de condición fiscal a todos tus proveedores recurrentes para exigir la emisión de Facturas 'A'.")
+    st.checkbox("6. Actualizar tu estructura de costos y precios finales al público integrando el impacto del Impuesto al Valor Agregado.")
+    st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios fuera de tu provincia).")
 
-st.markdown("---")
-st.subheader("💾 Descargar Reporte Completo")
-st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción esqueleto.")
+    st.markdown("---")
+    st.subheader("💾 Descargar Reporte Completo")
+    st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción esqueleto.")
 
-pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
+    # Generación segura de los bytes del PDF
+    pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
 
-st.download_button
-(label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
-data=pdf_bytes,
-file_name="Planificacion_Fiscal_RI.pdf",
-mime="application/pdf"
-)
+    # Botón de descarga unificado en un solo bloque estructurado
+    st.download_button(label="📥 Descargar Radiografía y Hoja de Ruta en PDF", data=pdf_bytes, file_name="Planificacion_Fiscal_RI.pdf", mime="application/pdf")
