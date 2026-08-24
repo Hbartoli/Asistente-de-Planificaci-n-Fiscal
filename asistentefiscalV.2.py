@@ -46,12 +46,17 @@ def generar_pdf(datos_fiscales, checklist_tareas):
     pdf.cell(0, 10, "1. Radiografia Fiscal Mensual Estimada", ln=True)
     pdf.set_font("Helvetica", "", 11)
     
-    # Tabla de Datos Fiscales
+    # Tabla de Datos Fiscales con distribución absoluta en dos columnas independientes
     for k, v in datos_fiscales.items():
         pdf.set_font("Helvetica", "B", 11)
-        pdf.cell(60, 8, f"{k}:", border=0)
+        # Imprime la etiqueta ocupando un ancho seguro de 85mm sin saltar de línea
+        pdf.cell(85, 8, f"{k}:", border=0, ln=0) 
+        
+        # Saltamos manualmente a la columna derecha fijando el cursor a los 110mm de la hoja
+        pdf.set_x(110) 
         pdf.set_font("Helvetica", "", 11)
-        pdf.cell(0, 8, f" {v}", border=0, ln=True)
+        # Imprime el valor numérico en su columna y recién ahí salta al siguiente renglón (ln=True)
+        pdf.cell(0, 8, f"{v}", border=0, ln=True)
         
     pdf.ln(10)
     
