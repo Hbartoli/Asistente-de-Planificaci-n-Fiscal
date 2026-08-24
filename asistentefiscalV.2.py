@@ -150,12 +150,52 @@ with tab4:
     st.subheader("💾 Descargar Reporte Completo")
     st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción estructurado.")
 
-    # Generación del archivo PDF mediante la función
-    pdf_bytes = generar_pdf(datos_reporte, lista_tareas)
-
-    st.download_button(
-        label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
-        data=pdf_bytes,
-        file_name="Planificacion_Fiscal_RI.pdf",
-        mime="application/pdf"
-    )
+    # Función corregida para generar el PDF en formato bytes compatible con Streamlit
+def generar_pdf(datos_fiscales, checklist_tareas):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    
+    # Título Principal
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_text_color(31, 119, 180) # Azul corporativo
+    pdf.cell(0, 10, "Reporte de Planificacion Fiscal", ln=True, align="C")
+    pdf.set_font("Helvetica", "I", 10)
+    pdf.set_text_color(100, 100, 100)
+    pdf.cell(0, 6, "Transicion de Monotributo a Responsable Inscripto", ln=True, align="C")
+    pdf.ln(10)
+    
+    # Sección 1: Radiografía Fiscal
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 10, "1. Radiografia Fiscal Mensual Estimada", ln=True)
+    pdf.set_font("Helvetica", "", 11)
+    
+    # Tabla de Datos Fiscales
+    for k, v in datos_fiscales.items():
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.cell(60, 8, f"{k}:", border=0)
+        pdf.set_font("Helvetica", "", 11)
+        pdf.cell(0, 8, f" {v}", border=0, ln=True)
+        
+    pdf.ln(10)
+    
+    # Sección 2: Hoja de Ruta
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "2. Hoja de Ruta / Plan de Accion", ln=True)
+    pdf.set_font("Helvetica", "", 10)
+    
+    for tarea in checklist_tareas:
+        # Reemplazar caracteres con tildes para evitar errores de codificación
+        tarea_limpia = tarea.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ñ", "n").replace("Á", "A").replace("É", "E").replace("Í", "I").replace("Ó", "O").replace("Ú", "U")
+        pdf.multi_cell(0, 6, f"[ ] {tarea_limpia}")
+        pdf.ln(2)
+        
+    # Pie de página o nota final
+    pdf.ln(5)
+    pdf.set_font("Helvetica", "I", 9)
+    pdf.set_text_color(120, 120, 120)
+    pdf.multi_cell(0, 5, "Nota: Este reporte es una simulacion pedagogica basada en los parametros fiscales vigentes. No reemplaza la consulta vinculante con un Contador Publico matriculado.")
+    
+    # SOLUCIÓN: Convertir el bytearray de fpdf2 a un objeto bytes nativo de Python
+    return bytes(pdf.output())
