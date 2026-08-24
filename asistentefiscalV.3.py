@@ -194,40 +194,34 @@ with tab3:
     with col_f2:
         iibb_factura = st.number_input("Retención/Percepción est. de IIBB (%):", min_value=0.0, max_value=7.0, value=3.5, step=0.5, key="factura_iibb")
 
-    # Lógica matemática estructurada
-    if "valor Neto" in tipo_calculo:
-        neto_factura = monto_ingresado
-        iva_factura = neto_factura * (iva_seleccionado / 100)
-        total_factura = neto_factura + iva_factura
-    else:
-total_factura = monto_ingresado
-neto_factura = total_factura / (1 + (iva_seleccionado / 100))
-iva_factura = total_factura - neto_factura
+    # Lógica lineal unificada para evitar errores de tabulación con 'else'
+    es_neto = "valor Neto" in tipo_calculo
+    
+    neto_factura = monto_ingresado if es_neto else (monto_ingresado / (1 + (iva_seleccionado / 100)))
+    iva_factura = (neto_factura * (iva_seleccionado / 100)) if es_neto else (monto_ingresado - neto_factura)
+    total_factura = (neto_factura + iva_factura) if es_neto else monto_ingresado
 
-iibb_deduccion = neto_factura * (iibb_factura / 100)
-real_bolsillo_factura = neto_factura - iibb_deduccion
+    iibb_deduccion = neto_factura * (iibb_factura / 100)
+    real_bolsillo_factura = neto_factura - iibb_deduccion
 
-st.markdown("---")
-st.subheader("📝 Desglose de la Factura a Emitir:")
-
-cf1, cf2, cf3 = st.columns(3)
-with cf1:
-  st.metric(label="Subtotal (Neto Gravado)", 
-            value=f"${neto_factura:,.2f}")
-  with cf2:
-    st.metric(label="IVA ({:.1f}%)".format(iva_seleccionado), 
-              value=f"${iva_factura:,.2f}")
+    st.markdown("---")
+    st.subheader("📝 Desglose de la Factura a Emitir:")
+    
+    cf1, cf2, cf3 = st.columns(3)
+    with cf1:
+        st.metric(label="Subtotal (Neto Gravado)", value=f"${neto_factura:,.2f}")
+    with cf2:
+        st.metric(label="IVA ({:.1f}%)".format(iva_seleccionado), value=f"${iva_factura:,.2f}")
     with cf3:
-      st.metric(label="Total de la Factura", value=f"${total_factura:,.2f}")
+        st.metric(label="Total de la Factura", value=f"${total_factura:,.2f}")
 
-st.markdown("### 💸 El impacto impositivo real en esta venta:")
-st.write(f"De los ${total_factura:,.2f} que paga tu cliente:")
-st.write(f"- ${iva_factura:,.2f} se los tenés que guardar a ARCA (es IVA débito fiscal).")
-st.write(f"- ${iibb_deduccion:,.2f} corresponden al costo estimado de Ingresos Brutos.")
-st.success(f"Te quedan realmente libres de bolsillo: 
-${real_bolsillo_factura:,.2f}")
-
-st.info("💡 Consejo para Facturas 'A': Si le facturás a otra empresa como Responsable Inscripto, recordá pasarle siempre tu precio + IVA, para que no pierdas margen de ganancia operativa.")
+    st.markdown("### 💸 El impacto impositivo real en esta venta:")
+    st.write(f"De los **${total_factura:,.2f}** que paga tu cliente:")
+    st.write(f"- **${iva_factura:,.2f}** se los tenés que guardar a ARCA (es IVA débito fiscal).")
+    st.write(f"- **${iibb_deduccion:,.2f}** corresponden al costo estimado de Ingresos Brutos.")
+    st.success(f"Te quedan realmente libres de bolsillo: **${real_bolsillo_factura:,.2f}**")
+    
+    st.info("💡 **Consejo para Facturas 'A':** Si le facturás a otra empresa como Responsable Inscripto, recordá pasarle siempre tu precio **+ IVA**, para que no pierdas margen de ganancia operativa.")
 
 # -------------------------------------------------------------------------
 # PESTAÑA 4: EL PUENTE FISCAL (Beneficios Ley 27.618)
