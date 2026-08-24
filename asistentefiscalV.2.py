@@ -25,11 +25,15 @@ LISTA_TAREAS_GLOBAL = [
     "7. Readecuar la situacion en Ingresos Brutos (Alta en Convenio Multilateral si comercializas bienes o servicios fuera de tu provincia)."
 ]
 
-# Función corregida para generar el PDF en formato bytes compatible con Streamlit
-def generar_pdf(datos_fiscales, checklist_tareas):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_auto_page_break(auto=True, margin=15)
+ # Tabla de Datos Fiscales con márgenes corregidos y tabulación limpia hacia la derecha
+    for k, v in datos_fiscales.items():
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.cell(90, 8, f"{k}:", border=0) # Ampliamos a 90mm para que la etiqueta tenga espacio
+        
+        # Forzamos la posición del valor numérico bien hacia la derecha (columna fija a los 100mm)
+        pdf.set_x(105) 
+        pdf.set_font("Helvetica", "", 11)
+        pdf.cell(0, 8, f"{v}", border=0, ln=True)
     
     # Título Principal
     pdf.set_font("Helvetica", "B", 18)
@@ -215,19 +219,9 @@ with tab4:
     st.subheader("💾 Descargar Reporte Completo")
     st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción estructurado.")
     
-    # Generación segura usando la lista global unificada
+    # LLAMADA CORRECTA: Usa 'datos_reporte' y 'LISTA_TAREAS_GLOBAL'
     pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
-    
-    # Tabla de Datos Fiscales con márgenes corregidos y tabulación limpia hacia la derecha
-    for k, v in datos_fiscales.items():
-        pdf.set_font("Helvetica", "B", 11)
-        pdf.cell(90, 8, f"{k}:", border=0) # Ampliamos a 90mm para que la etiqueta tenga espacio
-        
-        # Forzamos la posición del valor numérico bien hacia la derecha (columna fija a los 100mm)
-        pdf.set_x(105) 
-        pdf.set_font("Helvetica", "", 11)
-        pdf.cell(0, 8, f"{v}", border=0, ln=True)
-    
+         
     st.download_button(
         label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
         data=pdf_bytes,
