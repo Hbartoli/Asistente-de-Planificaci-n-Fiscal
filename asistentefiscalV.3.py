@@ -59,7 +59,7 @@ def generar_pdf(datos_fiscales, checklist_tareas):
     
     # Sección 2: Hoja de Ruta
     pdf.set_font("Helvetica", "B", 14)
-    pdf.cell(0, 10, "2. Hoja de Ruta / Plan de Accion", ln=True)
+    pdf.cell(0, 10, "2. Hoja de Ruta / Plan de Action", ln=True)
     pdf.set_font("Helvetica", "", 10)
     
     for tarea in checklist_tareas:
@@ -80,7 +80,7 @@ st.title("📈 Asistente de Planificación Fiscal")
 st.subheader("Transición interactiva de Monotributo a Responsable Inscripto sin morir en el intento")
 st.markdown("---")
 
-# Estructura de pestañas (Agregamos la pestaña del simulador de facturas individuales)
+# Estructura de pestañas
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🔍 1. Diagnóstico", 
     "📊 2. Simulador Mensual", 
@@ -175,13 +175,12 @@ with tab2:
     st.bar_chart(data=datos_grafico, x="Concepto", y="Monto ($)", color="#1F77B4")
 
 # -------------------------------------------------------------------------
-# PESTAÑA 3: SIMULADOR DE FACTURA INDIVIDUAL (NUEVA FUNCIÓN)
+# PESTAÑA 3: SIMULADOR DE FACTURA INDIVIDUAL
 # -------------------------------------------------------------------------
 with tab3:
     st.header("📱 Simulador de Factura Individual (A o B)")
     st.write("Calculá de manera rápida los componentes de una venta para saber cuánto dinero te queda realmente neto de impuestos.")
 
-    # Tipo de cálculo
     tipo_calculo = st.radio(
         "¿Cómo querés calcular tu factura?",
         ("A partir del valor Neto (Quiero que me queden $X de bolsillo)", 
@@ -195,80 +194,14 @@ with tab3:
     with col_f2:
         iibb_factura = st.number_input("Retención/Percepción est. de IIBB (%):", min_value=0.0, max_value=7.0, value=3.5, step=0.5, key="factura_iibb")
 
-    # Lógica matemática según la dirección del cálculo
+    # Lógica matemática estructurada
     if "valor Neto" in tipo_calculo:
         neto_factura = monto_ingresado
         iva_factura = neto_factura * (iva_seleccionado / 100)
         total_factura = neto_factura + iva_factura
-        else:
-        total_factura = monto_ingresado
-        neto_factura = total_factura / (1 + (iva_seleccionado / 100))
-        iva_factura = total_factura - neto_factura
+    else:
+    total_factura = monto_ingresado
+    neto_factura = total_factura / (1 + (iva_seleccionado / 100))
+    iva_factura = total_factura - neto_factura
 
-        iibb_deduccion = neto_factura * (iibb_factura / 100)
-        real_bolsillo_factura = neto_factura - iibb_deduccion
-        
-        st.markdown("---")
-        st.subheader("📝 Desglose de la Factura a Emitir:")
-
-        cf1, cf2, cf3 = st.columns(3)
-        with cf1:st.metric(label="Subtotal (Neto Gravado)", value=f"${neto_factura:,.2f}")
-          with cf2:st.metric(label="IVA ({:.1f}%)".format(iva_seleccionado), value=f"${iva_factura:,.2f}")
-            with cf3:st.metric(label="Total de la Factura", value=f"${total_factura:,.2f}")
-
-        st.markdown("### 💸 El impacto impositivo real en esta venta:")
-        st.write(f"De los ${total_factura:,.2f} que paga tu cliente:")
-        st.markdown(f"""
-        *${iva_factura:,.2f} se los tenés que guardar a ARCA (es IVA débito fiscal).
-        *${iibb_deduccion:,.2f} corresponden al costo estimado de Ingresos Brutos.
-        *Te quedan realmente libres: ${real_bolsillo_factura:,.2f} (Base imponible para Ganancias al cierre de año).
-        """, unsafe_allow_html=True)
-
-        st.info("💡 Consejo para Facturas 'A': Si le facturás a otra empresa como Responsable Inscripto, recordá pasarle siempre tu precio + IVA, para que no pierdas margen de ganancia operativa.")
-
- # -------------------------------------------------------------------------   
- # PESTAÑA 4: EL PUENTE FISCAL (Beneficios Ley 27.618)
- # -------------------------------------------------------------------------  
-
-   with tab4:
-   st.header("🛡️ Beneficios del Régimen de Puente Fiscal")
-   st.write("Si tu transición es planificada y ordenada, la normativa vigente mitiga el impacto financiero mediante créditos fiscales adicionales:")
-
-   st.markdown("""- Crédito Fiscal Presunto de IVA: Podés computar el IVA contenido en las compras hechas a proveedores en los 12 meses anteriores al cambio.- Deducción Especial de Transición: Reducción de la base imponible del Impuesto a las Ganancias.- Reducción Progresiva de IVA: Descuento directo sobre el saldo técnico de IVA del 50% el primer año, 30% el segundo año y 10% el tercer año.""")
-
-   ingresos_anuales_est = ingresos_mensuales * 12
-   st.write(f"Tu proyección de ingresos anuales estimados es de: 
-   ${ingresos_anuales_est:,.2f}")
-
-   if ingresos_anuales_est <= (TOPE_MONOTRIBUTO_ANUAL * 1.5): 
-   st.success("🎉 Calificás para el Puente Fiscal: Tus ingresos estimados se encuentran dentro del límite del beneficio.")
-   else:
-   st.warning("⚠️ Excedido de Parámetros: Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")
-
- # -------------------------------------------------------------------------   
- # PESTAÑA 5: CHECKLIST Y HOJA DE RUTA + EXPORTACIÓN
- # -------------------------------------------------------------------------  
-
-  with tab5:
-  st.header("📋 Plan de Acción Estructurado")
-  st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")
-
-  st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")
-  st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")
-  st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")
-  st.checkbox("4. Dar de alta un nuevo punto de venta web específico para Facturación Electrónica tipo 'A' y 'B'.")
-  st.checkbox("5. Informar el cambio de condición fiscal a todos tus proveedores recurrentes para exigir la emisión de Facturas 'A'.")
-  st.checkbox("6. Actualizar tu estructura de costos y precios finales al público integrando el impacto del Impuesto al Valor Agregado.")
-  st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios fuera de tu provincia).")
-
-  st.markdown("---")
-  st.subheader("💾 Descargar Reporte Completo")
-  st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción esqueleto.")
-
-  pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)
-
-  st.download_button(
-  label="📥 Descargar Radiografía y Hoja de Ruta en PDF",
-  data=pdf_bytes,file_name="Planificacion_Fiscal_RI.pdf",
-  mime="application/pdf"
-  )
+    iibb_deduccion = neto_factura * (iibb_factura / 100)real_bolsillo_factura = neto_factura - iibb_deduccionst.markdown("---")st.subheader("📝 Desglose de la Factura a Emitir:")cf1, cf2, cf3 = st.columns(3)with cf1:st.metric(label="Subtotal (Neto Gravado)", value=f"${neto_factura:,.2f}")with cf2:st.metric(label="IVA ({:.1f}%)".format(iva_seleccionado), value=f"${iva_factura:,.2f}")with cf3:st.metric(label="Total de la Factura", value=f"${total_factura:,.2f}")st.markdown("### 💸 El impacto impositivo real en esta venta:")st.write(f"De los ${total_factura:,.2f} que paga tu cliente:")st.write(f"- ${iva_factura:,.2f} se los tenés que guardar a ARCA (es IVA débito fiscal).")st.write(f"- ${iibb_deduccion:,.2f} corresponden al costo estimado de Ingresos Brutos.")st.success(f"Te quedan realmente libres de bolsillo: ${real_bolsillo_factura:,.2f}")st.info("💡 Consejo para Facturas 'A': Si le facturás a otra empresa como Responsable Inscripto, recordá pasarle siempre tu precio + IVA, para que no pierdas margen de ganancia operativa.")-------------------------------------------------------------------------PESTAÑA 4: EL PUENTE FISCAL (Beneficios Ley 27.618)-------------------------------------------------------------------------with tab4:st.header("🛡️ Beneficios del Régimen de Puente Fiscal")st.write("Si tu transición es planificada y ordenada, la normativa vigente mitiga el impacto financiero mediante créditos fiscales adicionales:")st.markdown("""- Crédito Fiscal Presunto de IVA: Podés computar el IVA contenido en las compras hechas a proveedores en los 12 meses anteriores al cambio.- Deducción Especial de Transición: Reducción de la base imponible del Impuesto a las Ganancias.- Reducción Progresiva de IVA: Descuento directo sobre el saldo técnico de IVA del 50% el primer año, 30% el segundo año y 10% el tercer año.""")ingresos_anuales_est = ingresos_mensuales * 12st.write(f"Tu proyección de ingresos anuales estimados es de: ${ingresos_anuales_est:,.2f}")if ingresos_anuales_est <= (TOPE_MONOTRIBUTO_ANUAL * 1.5):st.success("🎉 Calificás para el Puente Fiscal: Tus ingresos estimados se encuentran dentro del límite del beneficio.")else:st.warning("⚠️ Excedido de Parámetros: Tus ingresos anuales estimados superan el límite extendido. Tu alta será directa.")-------------------------------------------------------------------------PESTAÑA 5: CHECKLIST Y HOJA DE RUTA + EXPORTACIÓN-------------------------------------------------------------------------with tab5:st.header("📋 Plan de Acción Estructurado")st.write("Seguí estos pasos cronológicos para formalizar tu traspaso sin contingencias impositivas:")st.checkbox("1. Vincular un Contador/a Matriculado al Administrador de Relaciones de ARCA para delegar las liquidaciones mensuales.")st.checkbox("2. Gestionar el alta formal en los impuestos de IVA (Régimen General) e Impuesto a las Ganancias.")st.checkbox("3. Registrarse en el régimen previsional de Autónomos en la categoría mínima que corresponda a tu actividad.")st.checkbox("4. Dar de alta un nuevo punto de venta web específico para Facturación Electrónica tipo 'A' y 'B'.")st.checkbox("5. Informar el cambio de condición fiscal a todos tus proveedores recurrentes para exigir la emisión de Facturas 'A'.")st.checkbox("6. Actualizar tu estructura de costos y precios finales al público integrando el impacto del Impuesto al Valor Agregado.")st.checkbox("7. Readecuar la situación en Ingresos Brutos (Alta en Convenio Multilateral si comercializás bienes o servicios fuera de tu provincia).")st.markdown("---")st.subheader("💾 Descargar Reporte Completo")st.write("Hacé clic en el botón de abajo para generar tu documento PDF personalizado con la radiografía financiera y tu plan de acción esqueleto.")pdf_bytes = generar_pdf(datos_reporte, LISTA_TAREAS_GLOBAL)st.download_button(label="📥 Descargar Radiografía y Hoja de Ruta en PDF",data=pdf_bytes,file_name="Planificacion_Fiscal_RI.pdf",mime="application/pdf")
